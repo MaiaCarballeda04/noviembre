@@ -197,12 +197,6 @@
 </head>
 <body class="flex items-center justify-center min-h-screen relative overflow-hidden select-none">
 
-    <!-- REPRODUCTOR CON RUTA CODIFICADA PARA EVITAR ERRORES EN GITHUB -->
-    <audio id="musicaFondo" controls loop style="position: fixed; bottom: 10px; right: 10px; z-index: 9999; opacity: 0.85; height: 35px; width: 220px; border-radius: 20px;">
-        <source src="Carlitos_La_Mona_Jimenez_-_-_Ramito_de_Violetas_%28mp3.pm%29.mp3" type="audio/mpeg">
-        Tu navegador no soporta el formato de audio.
-    </audio>
-
     <!-- Canvas para destellos y pétalos flotantes -->
     <canvas id="bgCanvas"></canvas>
 
@@ -274,7 +268,7 @@
         </div>
     </div>
 
-    <!-- Scripts de Audio y Animaciones -->
+    <!-- Scripts de Audio Sintetizado y Animaciones -->
     <script>
         let audioCtx = null;
 
@@ -602,17 +596,13 @@
             startBloomAnimation();
         }
 
-        /* Apertura del sobre y reproducción de audio */
+        /* Apertura del sobre y efectos mágicos visuales (sin errores de audio) */
         function openMagicEnvelope() {
             const envelope = document.getElementById('envelope');
             const envelopeSection = document.getElementById('envelopeSection');
             const magicSection = document.getElementById('magicSection');
-            const musica = document.getElementById('musicaFondo');
 
             if (envelope.classList.contains('open')) return;
-
-            // Reproducir tu audio real de La Mona al abrir
-            musica.play().catch(e => console.log("Audio autoplay prevented by browser", e));
 
             envelope.classList.add('open');
             playArpeggio();
