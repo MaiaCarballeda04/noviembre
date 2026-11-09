@@ -197,9 +197,9 @@
 </head>
 <body class="flex items-center justify-center min-h-screen relative overflow-hidden select-none">
 
-    <!-- REPRODUCTOR DE AUDIO DE LA MONA JIMÉNEZ -->
-    <audio id="musicaFondo" loop>
-        <source src="Carlitos_La_Mona_Jimenez_-_-_Ramito_de_Violetas_(mp3.pm).aac" type="audio/aac">
+    <!-- REPRODUCTOR DE AUDIO DE LA MONA JIMÉNEZ CON NOMBRE EXACTO -->
+    <audio id="musicaFondo" controls loop style="position: fixed; bottom: 10px; right: 10px; z-index: 9999; opacity: 0.8; height: 35px; width: 200px;">
+        <source src="Carlitos_La_Mona_Jimenez_-__Ramito_de_Violetas_(mp3.pm).aac" type="audio/aac">
         Tu navegador no soporta el formato de audio.
     </audio>
 
@@ -276,9 +276,6 @@
 
     <!-- Scripts de Audio y Animaciones -->
     <script>
-        /* -------------------------------------------------------------
-           SINTETIZADOR DE CAMPANITAS AUXILIARES
-        ------------------------------------------------------------- */
         let audioCtx = null;
 
         function initAudio() {
@@ -320,9 +317,7 @@
             });
         }
 
-        /* -------------------------------------------------------------
-           PARTÍCULAS Y PÉTALOS EN EL FONDO (Canvas BG)
-        ------------------------------------------------------------- */
+        /* Partículas y Fondo */
         const bgCanvas = document.getElementById('bgCanvas');
         const bgCtx = bgCanvas.getContext('2d');
         let bgWidth, bgHeight;
@@ -403,9 +398,7 @@
         }
         animateBg();
 
-        /* -------------------------------------------------------------
-           ANIMACIÓN DEL RAMITO DE FLORES VIOLETAS (Canvas)
-        ------------------------------------------------------------- */
+        /* Animación de Flores */
         const flowerCanvas = document.getElementById('flowerCanvas');
         const fCtx = flowerCanvas.getContext('2d');
         let bloomProgress = 0;
@@ -609,9 +602,7 @@
             startBloomAnimation();
         }
 
-        /* -------------------------------------------------------------
-           LÓGICA DE APERTURA DEL SOBRE Y REPRODUCCIÓN DE MÚSICA
-        ------------------------------------------------------------- */
+        /* Apertura del sobre y reproducción de audio */
         function openMagicEnvelope() {
             const envelope = document.getElementById('envelope');
             const envelopeSection = document.getElementById('envelopeSection');
@@ -620,8 +611,8 @@
 
             if (envelope.classList.contains('open')) return;
 
-            // Reproducir la canción de La Mona al abrir el sobre
-            musica.play().catch(e => console.log("Audio autoplay prevented", e));
+            // Reproducir audio de La Mona
+            musica.play().catch(e => console.log("Audio autoplay prevented by browser", e));
 
             envelope.classList.add('open');
             playArpeggio();
