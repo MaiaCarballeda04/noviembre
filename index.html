@@ -197,6 +197,12 @@
 </head>
 <body class="flex items-center justify-center min-h-screen relative overflow-hidden select-none">
 
+    <!-- REPRODUCTOR DE AUDIO DE LA MONA JIMÉNEZ -->
+    <audio id="musicaFondo" loop>
+        <source src="Carlitos_La_Mona_Jimenez_-_-_Ramito_de_Violetas_(mp3.pm).aac" type="audio/aac">
+        Tu navegador no soporta el formato de audio.
+    </audio>
+
     <!-- Canvas para destellos y pétalos flotantes -->
     <canvas id="bgCanvas"></canvas>
 
@@ -253,7 +259,7 @@
 
             <!-- El mensaje exacto solicitado -->
             <blockquote class="text-xl sm:text-2xl font-handwriting text-purple-100 leading-relaxed mb-6 px-2 drop-shadow">
-                "¿Quién cada nueve de noviembre, como siempre y sin tarjeta... te mandaba un ramito de violetas? 💜 te envió tu ramito virtual (aprendí como se hacen para que no te falten flores) se te quiere muchisimo zoé"
+                ¿Quién cada nueve de noviembre, como siempre y sin tarjeta... te mandaba un ramito de violetas? 💜 te envió tu ramito virtual porque ya aprendí como se hacen jaja espero que te gusten zoé se te quiere mucho
             </blockquote>
 
             <!-- Botones de Acción -->
@@ -268,10 +274,10 @@
         </div>
     </div>
 
-    <!-- Audio sintetizado con Web Audio API -->
+    <!-- Scripts de Audio y Animaciones -->
     <script>
         /* -------------------------------------------------------------
-           SINTETIZADOR DE AUDIO (Web Audio API - Sin librerías externas)
+           SINTETIZADOR DE CAMPANITAS AUXILIARES
         ------------------------------------------------------------- */
         let audioCtx = null;
 
@@ -281,7 +287,6 @@
             }
         }
 
-        // Toca un tono musical suave estilo arpa / campanita
         function playChimeSound(freq = 523.25, duration = 0.5) {
             initAudio();
             if (!audioCtx) return;
@@ -306,9 +311,8 @@
             }
         }
 
-        // Melodía mágica al abrir el sobre
         function playArpeggio() {
-            const notes = [440, 554.37, 659.25, 880, 1108.73]; // La mayor mágico
+            const notes = [440, 554.37, 659.25, 880, 1108.73];
             notes.forEach((freq, idx) => {
                 setTimeout(() => {
                     playChimeSound(freq, 0.8);
@@ -333,7 +337,6 @@
         const particles = [];
         const petals = [];
 
-        // Generar destellos de fondo
         for (let i = 0; i < 45; i++) {
             particles.push({
                 x: Math.random() * bgWidth,
@@ -344,7 +347,6 @@
             });
         }
 
-        // Generar pétalos flotantes
         for (let i = 0; i < 25; i++) {
             petals.push({
                 x: Math.random() * bgWidth,
@@ -358,24 +360,9 @@
             });
         }
 
-        // Mouse Parallax Effect
-        let mouseX = bgWidth / 2;
-        let mouseY = bgHeight / 2;
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-        window.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 0) {
-                mouseX = e.touches[0].clientX;
-                mouseY = e.touches[0].clientY;
-            }
-        });
-
         function animateBg() {
             bgCtx.clearRect(0, 0, bgWidth, bgHeight);
 
-            // Dibujar destellos
             particles.forEach(p => {
                 p.alpha += p.speed;
                 if (p.alpha > 1 || p.alpha < 0) p.speed = -p.speed;
@@ -388,7 +375,6 @@
                 bgCtx.fill();
             });
 
-            // Dibujar pétalos cayendo
             petals.forEach(p => {
                 p.y += p.vy;
                 p.x += p.vx + Math.sin(p.y * 0.01) * 0.3;
@@ -403,7 +389,6 @@
                 bgCtx.translate(p.x, p.y);
                 bgCtx.rotate(p.angle);
 
-                // Forma de pétalo
                 bgCtx.beginPath();
                 bgCtx.moveTo(0, 0);
                 bgCtx.bezierCurveTo(-p.size, -p.size, -p.size, p.size, 0, p.size * 1.4);
@@ -434,7 +419,6 @@
         setFlowerCanvasSize();
         window.addEventListener('resize', setFlowerCanvasSize);
 
-        // Definición de las flores en el ramito
         const flowers = [
             { xRatio: 0.5, yRatio: 0.35, size: 28, delay: 0.3, petals: 5, color: '#a855f7', center: '#fef08a' },
             { xRatio: 0.38, yRatio: 0.42, size: 24, delay: 0.45, petals: 5, color: '#9333ea', center: '#fde047' },
@@ -445,7 +429,6 @@
             { xRatio: 0.55, yRatio: 0.58, size: 21, delay: 0.85, petals: 5, color: '#c084fc', center: '#fde047' }
         ];
 
-        // Definición de los tallos
         const stems = [
             { startX: 0.5, startY: 0.95, endX: 0.5, endY: 0.35, controlX: 0.48 },
             { startX: 0.5, startY: 0.95, endX: 0.38, endY: 0.42, controlX: 0.42 },
@@ -461,11 +444,9 @@
             const h = flowerCanvas.height;
             fCtx.clearRect(0, 0, w, h);
 
-            // 1. Dibujar Lazo/Moño dorado en la base
             const ribbonY = h * 0.82;
             const ribbonX = w * 0.5;
 
-            // 2. Dibujar Tallos (Crecimiento proporcional a progress)
             stems.forEach(stem => {
                 const sX = stem.startX * w;
                 const sY = stem.startY * h;
@@ -473,7 +454,6 @@
                 const eY = stem.endY * h;
                 const cX = stem.controlX * w;
 
-                // Interpolar punto final basado en progress
                 const currentProgress = Math.min(1, Math.max(0, progress * 1.4));
                 const curEX = sX + (eX - sX) * currentProgress;
                 const curEY = sY + (eY - sY) * currentProgress;
@@ -483,11 +463,10 @@
                 fCtx.moveTo(sX, sY);
                 fCtx.quadraticCurveTo(curCX, (sY + curEY) / 2, curEX, curEY);
                 fCtx.lineWidth = 4;
-                fCtx.strokeStyle = '#15803d'; // Verde tallo
+                fCtx.strokeStyle = '#15803d';
                 fCtx.lineCap = 'round';
                 fCtx.stroke();
 
-                // Hojas Verdes delicadas a lo largo de los tallos
                 if (currentProgress > 0.4) {
                     const leafProgress = (currentProgress - 0.4) / 0.6;
                     fCtx.save();
@@ -508,13 +487,10 @@
                 }
             });
 
-            // 3. Dibujar Flores (Florecimiento progresivo tras tallos)
             flowers.forEach(fl => {
                 if (progress < fl.delay) return;
 
-                // Normalizar escala de la flor (0 a 1)
                 const flowerScale = Math.min(1, (progress - fl.delay) / (1 - fl.delay));
-                // Efecto de rebote suave (easeOutBack)
                 const easedScale = Math.sin((flowerScale * Math.PI) / 2) * (1 + 0.1 * Math.sin(flowerScale * Math.PI));
 
                 const fx = fl.xRatio * w;
@@ -524,23 +500,19 @@
                 fCtx.save();
                 fCtx.translate(fx, fy);
 
-                // Dibujar pétalos de la violeta
                 for (let i = 0; i < fl.petals; i++) {
                     const angle = (i * 2 * Math.PI) / fl.petals - Math.PI / 2;
                     fCtx.save();
                     fCtx.rotate(angle);
 
-                    // Sombra suave en pétalos
                     fCtx.shadowBlur = 8;
                     fCtx.shadowColor = 'rgba(147, 51, 234, 0.4)';
 
-                    // Petalo individual (forma acorazonada suave)
                     fCtx.beginPath();
                     fCtx.moveTo(0, 0);
                     fCtx.bezierCurveTo(-currentSize * 0.6, -currentSize * 0.7, -currentSize * 0.8, -currentSize * 1.3, 0, -currentSize * 1.4);
                     fCtx.bezierCurveTo(currentSize * 0.8, -currentSize * 1.3, currentSize * 0.6, -currentSize * 0.7, 0, 0);
 
-                    // Gradiente de color en cada pétalo
                     const grad = fCtx.createRadialGradient(0, -currentSize * 0.7, 2, 0, -currentSize * 0.7, currentSize);
                     grad.addColorStop(0, fl.color);
                     grad.addColorStop(1, '#4c1d95');
@@ -550,7 +522,6 @@
                     fCtx.restore();
                 }
 
-                // Centro de la flor (Pistilo amarillo resplandeciente)
                 fCtx.beginPath();
                 fCtx.arc(0, 0, currentSize * 0.22, 0, Math.PI * 2);
                 fCtx.fillStyle = fl.center;
@@ -558,7 +529,6 @@
                 fCtx.shadowColor = '#fef08a';
                 fCtx.fill();
 
-                // Detalle central
                 fCtx.beginPath();
                 fCtx.arc(0, 0, currentSize * 0.1, 0, Math.PI * 2);
                 fCtx.fillStyle = '#d97706';
@@ -567,14 +537,12 @@
                 fCtx.restore();
             });
 
-            // 4. Moño Dorado Elegante en el centro del ramo
             if (progress > 0.3) {
                 const ribbonScale = Math.min(1, (progress - 0.3) / 0.4);
                 fCtx.save();
                 fCtx.translate(ribbonX, ribbonY);
                 fCtx.scale(ribbonScale, ribbonScale);
 
-                // Lazos del moño
                 fCtx.beginPath();
                 fCtx.ellipse(-14, -4, 16, 9, -Math.PI / 6, 0, Math.PI * 2);
                 fCtx.ellipse(14, -4, 16, 9, Math.PI / 6, 0, Math.PI * 2);
@@ -584,14 +552,12 @@
                 fCtx.lineWidth = 1.5;
                 fCtx.stroke();
 
-                // Nudo central
                 fCtx.beginPath();
                 fCtx.arc(0, 0, 7, 0, Math.PI * 2);
                 fCtx.fillStyle = '#f59e0b';
                 fCtx.fill();
                 fCtx.stroke();
 
-                // Tiras del moño
                 fCtx.beginPath();
                 fCtx.moveTo(-3, 4);
                 fCtx.lineTo(-12, 22);
@@ -605,23 +571,22 @@
                 fCtx.lineTo(12, 22);
                 fCtx.lineTo(4, 20);
                 fCtx.lineTo(0, 5);
+                fCtx.fillStyle = '#d97706';
                 fCtx.fill();
 
                 fCtx.restore();
             }
         }
 
-        // Iniciar animación de florecimiento
         function startBloomAnimation() {
             bloomProgress = 0;
             const startTime = performance.now();
-            const duration = 2800; // 2.8 segundos de florecimiento progresivo
+            const duration = 2800;
 
             function step(timestamp) {
                 const elapsed = timestamp - startTime;
                 bloomProgress = Math.min(1, elapsed / duration);
 
-                // Generar soniditos al florecer ciertas flores
                 if (Math.random() < 0.08 && bloomProgress > 0.3 && bloomProgress < 0.95) {
                     playChimeSound(600 + Math.random() * 400, 0.2);
                 }
@@ -631,7 +596,6 @@
                 if (bloomProgress < 1) {
                     bloomAnimId = requestAnimationFrame(step);
                 } else {
-                    // Revelar el mensaje suavemente al terminar
                     revealMessageCard();
                 }
             }
@@ -646,20 +610,22 @@
         }
 
         /* -------------------------------------------------------------
-           LÓGICA DE APERTURA DEL SOBRE Y TRANSICIÓN
+           LÓGICA DE APERTURA DEL SOBRE Y REPRODUCCIÓN DE MÚSICA
         ------------------------------------------------------------- */
         function openMagicEnvelope() {
             const envelope = document.getElementById('envelope');
             const envelopeSection = document.getElementById('envelopeSection');
             const magicSection = document.getElementById('magicSection');
+            const musica = document.getElementById('musicaFondo');
 
-            // Evitar múltiples clicks
             if (envelope.classList.contains('open')) return;
+
+            // Reproducir la canción de La Mona al abrir el sobre
+            musica.play().catch(e => console.log("Audio autoplay prevented", e));
 
             envelope.classList.add('open');
             playArpeggio();
 
-            // Ráfaga de destellos en el canvas
             for (let i = 0; i < 35; i++) {
                 petals.push({
                     x: window.innerWidth / 2,
@@ -673,7 +639,6 @@
                 });
             }
 
-            // Ocultar sobre y mostrar sección del ramo
             setTimeout(() => {
                 envelopeSection.style.opacity = '0';
                 envelopeSection.style.transform = 'scale(0.8)';
@@ -690,7 +655,7 @@
         function revealMessageCard() {
             const card = document.getElementById('messageCard');
             card.classList.add('fade-enter-active');
-            playChimeSound(523.25, 1.2); // Acorde final suave
+            playChimeSound(523.25, 1.2);
         }
     </script>
 </body>
